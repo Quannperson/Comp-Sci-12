@@ -1,18 +1,20 @@
 #include <iostream>
+#include <limits>
 
 using namespace std;
 int main ()
-
+//im confused
 {
     //Variables
-    int number;
-    short broken = number;
+    int number = 0;
+    double broken; 
+    number = broken;
 
     //Main
-    cout << "Input your favourite 8- digit number!\n";
+    cout << "Input your favourite 12-digit number!\n";
     cin >> number;
 
     cout << "\nWas this your number?\n";
-    cout << "Number: " << broken << "\n Oh, it looks like your number broke" << endl;
+    cout << "Number: " << number << "\n Oh, it looks like your number broke" << endl;
 
 }

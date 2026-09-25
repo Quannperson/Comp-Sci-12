@@ -4,23 +4,25 @@
 #include <ctime>
 #include <string>
 #include <fstream>
+#include <limits>
 
 using namespace std;
 
-    vector <string> list(string variable, vector <string> toDo)
-    {
-        while (getline (cin, variable))
-        {
-            if (variable == "done")
-            {
-                break;
-            }
+void list(vector <string>& toDo)
+{
+    string variable;
 
-            cout << "-";
-            toDo.push_back(variable);
+    while (getline (cin, variable))
+    {
+        if (variable == "done")
+        {
+            break;
         }
-        return toDo;
+
+        cout << "-";
+        toDo.push_back(variable);
     }
+}
 
 int main()
 {
@@ -66,9 +68,10 @@ int main()
         }
     }
 
-    cout << "\nWhat needs to be done today?\n (type done once finished)\n-";
+    cout << "\nWhat needs to be done today?\n (type done once finished)\n";
 
-    list(variable, toDo);
+    cin.ignore();
+    list(toDo);
 
     cout << "\033[2J\033[1;1H";
     cout << "[MY TODO-LIST] \nDate/Time: " << timeOutput;
@@ -78,18 +81,28 @@ int main()
         cout << "-" << toDo[i] << endl;
     }
 
-    cout << "What would you like to do next?\n [HOME-ADD-REMOVE]";
+    cout << "What would you like to do next?\n [HOME-ADD-REMOVE-SAVE]\n";
     cin >> options; 
     if (options == "REMOVE")
     {
         cout << "\n What would you like to remove?\n";
         cin >> remove;
 
-        toDo.erase (remove_if(toDo.begin(), toDo.end(), remove));
+        //auto infers context of vector <string> toDo by looking at argument
+        auto search = find(toDo.begin(), toDo.end(), remove);
     }
-    
     if (options == "ADD")
     {
-        list(variable, toDo);
+        list(toDo);
     }
+    if (options == "SAVE")
+    {
+         saved << "[MY TODO-LIST]\n" << timeOutput;
+
+        for (int i = 0; i < toDo.size(); i++)
+        {
+            saved << "-" << toDo[i] << endl;
+        }
+    }
+
 }

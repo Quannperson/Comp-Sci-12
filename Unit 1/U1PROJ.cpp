@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//Ask user for tasks until done is inputted
 void list(vector <string>& toDo)
 {
     string variable;
@@ -70,12 +71,14 @@ int main()
 
     cout << "\nWhat needs to be done today?\n (type done once finished)\n";
 
+    //call list function
     cin.ignore();
     list(toDo);
 
     cout << "\033[2J\033[1;1H";
     cout << "[MY TODO-LIST] \nDate/Time: " << timeOutput;
 
+    //print inputted list
     for (int i = 0; i < toDo.size(); i++)
     {
         cout << "-" << toDo[i] << endl;
@@ -83,18 +86,41 @@ int main()
 
     cout << "What would you like to do next?\n [HOME-ADD-REMOVE-SAVE]\n";
     cin >> options; 
+
     if (options == "REMOVE")
     {
-        cout << "\n What would you like to remove?\n";
+        while (true)
+        {
+        cout << "\n What would you like to remove? (type done once finished)\n";
         cin >> remove;
+
+        if (remove == "done")
+        break;
 
         //auto infers context of vector <string> toDo by looking at argument
         auto search = find(toDo.begin(), toDo.end(), remove);
+
+            if (search != toDo.end())
+            {
+                toDo.erase(search);
+            }
+            else
+            {
+                cout << "\nItem couldn't be found, try again\n";
+            }
+
+        }
     }
+
     if (options == "ADD")
     {
+        for (int i = 0; i < toDo.size(); i++)
+        {
+            cout << "-" << toDo[i] << endl;
+        }
         list(toDo);
     }
+
     if (options == "SAVE")
     {
          saved << "[MY TODO-LIST]\n" << timeOutput;
@@ -105,4 +131,8 @@ int main()
         }
     }
 
+    if (options == "HOME")
+    {
+
+    }
 }

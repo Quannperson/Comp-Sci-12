@@ -25,8 +25,72 @@ void list(vector <string>& toDo)
     }
 }
 
-int main()
+void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
+{
+    string options;
+    string remove;
+    
+    while (true)
     {
+        cout << "What would you like to do next?\n [HOME-ADD-REMOVE-SAVE]\n";
+        cin >> options;
+        cin.ignore();
+
+        if (options == "HOME")
+        {
+            break;
+        }
+        else if (options == "REMOVE")
+        {
+            while (true)
+            {
+                cout << "\n What would you like to remove? (type done once finished)\n";
+                getline(cin, remove);
+
+                if (remove == "done")
+                    break;
+
+                auto search = find(toDo.begin(), toDo.end(), remove);
+
+                if (search != toDo.end())
+                {
+                    toDo.erase(search);
+                    cout << "Removed: " << remove << endl;
+                }
+                else
+                {
+                    cout << "\nItem couldn't be found, try again\n";
+                }
+            }
+        }
+        else if (options == "ADD")
+        {
+            cout << "\nWhat needs to be done today?\n (type done once finished)\n";
+            list(toDo);
+        }
+        else if (options == "SAVE")
+        {
+            saved << "[MY TODO-LIST]\n" << timeOutput;
+
+            for (int i = 0; i < toDo.size(); i++)
+            {
+                saved << "-" << toDo[i] << endl;
+            }
+
+            break;
+        }
+        else
+        {
+            cout << "Invalid option. Try again.\n";
+        }
+    }
+}
+
+int main()
+{
+    while (true)
+    {
+
         //txt file
         ofstream saved("U1PROJ.txt");
 
@@ -37,7 +101,6 @@ int main()
         string response;
         string options;
         string remove;
-        string menu;
 
         //Set time to EST
         time_t currentTime = time(nullptr);
@@ -64,16 +127,22 @@ int main()
         }
         else 
         {
+            cout << "Let's see your current to-do list!" << endl;
+            cout << "[MY TODO-LIST]\n" << timeOutput;
+
+            //output list
             for (int i = 0; i < toDo.size(); i++)
             {
                 cout << toDo[i] << endl;
             }
+
+            //call the menu function
+            menu(toDo, saved, timeOutput);
         }
 
         cout << "\nWhat needs to be done today?\n (type done once finished)\n";
 
         //call list function
-        cin.ignore();
         list(toDo);
 
         cout << "\033[2J\033[1;1H";
@@ -83,62 +152,9 @@ int main()
         for (int i = 0; i < toDo.size(); i++)
         {
             cout << "-" << toDo[i] << endl;
-        } 
-
-        while (true)
-        {
-            cout << "What would you like to do next?\n [HOME-ADD-REMOVE-SAVE]\n";
-            cin >> options;
-
-            if (options == "REMOVE")
-            {
-                while (true)
-                {
-                cout << "\n What would you like to remove? (type done once finished)\n";
-                getline(cin, remove);
-
-                if (remove == "done")
-                break;
-
-                //auto infers context of vector <string> toDo by looking at argument
-                auto search = find(toDo.begin(), toDo.end(), remove);
-
-                    if (search != toDo.end())
-                    {
-                        toDo.erase(search);
-                        cout << remove << " removed!";
-                    }
-                    else
-                    {
-                        cout << "\nItem couldn't be found, try again\n";
-                    }
-
-                }
-            }
-
-            if (options == "ADD")
-            {
-                for (int i = 0; i < toDo.size(); i++)
-                {
-                    cout << "-" << toDo[i] << endl;
-                }
-                list(toDo);
-            }
-
-            if (options == "SAVE")
-            {
-                saved << "[MY TODO-LIST]\n" << timeOutput;
-
-                for (int i = 0; i < toDo.size(); i++)
-                {
-                    saved << "-" << toDo[i] << endl;
-                }
-            }
-
-            cout << "Anything else? (Y/N)";
-            cin >> menu;
-
-            if (menu == "N")
-            break;
         }
+
+        //call the menu function
+        menu(toDo, saved, timeOutput);
     }
+}

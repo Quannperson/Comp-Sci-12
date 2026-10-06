@@ -76,8 +76,6 @@ void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
             {
                 saved << "-" << toDo[i] << endl;
             }
-
-            break;
         }
         else
         {
@@ -88,23 +86,27 @@ void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
 
 int main()
 {
-    while (true)
+    //Variables
+    vector <string> toDo;
+    string variable;
+    string viewCreate;
+    string response;
+    string options;
+    string remove;
+    string loopOrgo;
+
+    //txt file
+    ofstream saved("U1PROJ.txt");
+
+    //Set time to EST
+    time_t currentTime = time(nullptr);
+    string timeOutput = ctime(&currentTime);
+
+    //for looping
+    bool back = true;
+
+    while (back = true)
     {
-
-        //txt file
-        ofstream saved("U1PROJ.txt");
-
-        //Variables
-        vector <string> toDo;
-        string variable;
-        string viewCreate;
-        string response;
-        string options;
-        string remove;
-
-        //Set time to EST
-        time_t currentTime = time(nullptr);
-        string timeOutput = ctime(&currentTime);
 
         //Main
         cout << "Hello! Would you like to create a to-do list or view your current to-do list?" << endl;
@@ -156,5 +158,19 @@ int main()
 
         //call the menu function
         menu(toDo, saved, timeOutput);
+
+        cout << "Would you like to go back to view/create or will that be all?\n (return/finish)\n";
+        cin >> loopOrgo;
+
+        if (loopOrgo == "return")
+        {
+        back = true;
+        }
+
+        else if (loopOrgo == "finish")
+        {
+        back = false;
+        cout << "Have a good day!";
+        }
     }
 }

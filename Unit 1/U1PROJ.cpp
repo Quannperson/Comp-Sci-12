@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <limits>
+#include <utility>
 
 using namespace std;
 
@@ -22,6 +23,38 @@ void list(vector <string>& toDo)
 
         cout << "-";
         toDo.push_back(variable);
+    }
+}
+
+void sort(vector <string>& toDo)
+{
+    int n = 1;
+    int m = 1;
+
+    char term = toDo[n][m];
+    char nextTerm = toDo[n+1][m];
+    char letter = 'a';
+
+    for ()
+    {
+        while (n = toDo.size() - 1)
+        {
+            if (sort == "alphabetical")
+            {
+                if (nextTerm > term)
+                {
+                    swap(toDo[n], toDo[n+1]);
+                    n++;
+                    m--;
+                }
+                else if (term == nextTerm)
+                {
+                    m++;
+                }
+            }
+            else if (sort == "reverse")
+            {}
+        }
     }
 }
 
@@ -94,6 +127,7 @@ int main()
     string options;
     string remove;
     string loopOrgo;
+    string sort;
 
     //txt file
     ofstream saved("U1PROJ.txt");

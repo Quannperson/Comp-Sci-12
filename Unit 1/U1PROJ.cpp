@@ -10,12 +10,19 @@
 using namespace std;
 
 //Ask user for tasks until done is inputted
-void list(vector <string>& toDo)
+void list(vector <string>& toDo, vector <int> priorityList)
 {
     string variable;
+    int priority;
 
     while (getline (cin, variable))
     {
+
+        cout << "\n Priority:";
+        priorityList.push_back(priority);
+
+       
+
         if (variable == "done")
         {
             break;
@@ -30,30 +37,39 @@ void sort(vector <string>& toDo)
 {
     int n = 1;
     int m = 1;
+    string sorting;
 
     char term = toDo[n][m];
     char nextTerm = toDo[n+1][m];
     char letter = 'a';
 
-    for ()
+    for (int i = 0; i < toDo.size(); i++)
     {
-        while (n = toDo.size() - 1)
+        if (sorting == "alphabetical")
         {
-            if (sort == "alphabetical")
+            if (nextTerm > term)
             {
-                if (nextTerm > term)
-                {
-                    swap(toDo[n], toDo[n+1]);
-                    n++;
-                    m--;
-                }
-                else if (term == nextTerm)
-                {
-                    m++;
-                }
+                swap(term, nextTerm);
+                n++;
+                m = 1;
             }
-            else if (sort == "reverse")
-            {}
+            else if (term == nextTerm)
+            {
+                m++;
+            }
+        }
+        else if (sorting == "reverse")
+        {
+            if (term > nextTerm)
+            {
+                swap(term, nextTerm);
+                n++;
+                m = 1;
+            }
+            else if (term == nextTerm)
+            {
+                m++;
+            }
         }
     }
 }
@@ -61,11 +77,12 @@ void sort(vector <string>& toDo)
 void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
 {
     string options;
+    string sorting;
     string remove;
     
     while (true)
     {
-        cout << "What would you like to do next?\n [HOME-ADD-REMOVE-SAVE]\n";
+        cout << "What would you like to do next?\n [HOME-ADD-REMOVE-SAVE-SORT]\n";
         cin >> options;
         cin.ignore();
 
@@ -99,7 +116,7 @@ void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
         else if (options == "ADD")
         {
             cout << "\nWhat needs to be done today?\n (type done once finished)\n";
-            list(toDo);
+            list(toDo, priorityList);
         }
         else if (options == "SAVE")
         {
@@ -109,6 +126,12 @@ void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
             {
                 saved << "-" << toDo[i] << endl;
             }
+        }
+        else if (options == "SORT")
+        {
+            cout << "How would you like to sort your list?\n [alphabetical/reverse]\n";
+            cin >> sorting;
+            sort(toDo);
         }
         else
         {
@@ -121,13 +144,13 @@ int main()
 {
     //Variables
     vector <string> toDo;
+    vector <int> priorityList;
     string variable;
     string viewCreate;
     string response;
     string options;
     string remove;
     string loopOrgo;
-    string sort;
 
     //txt file
     ofstream saved("U1PROJ.txt");
@@ -179,7 +202,7 @@ int main()
         cout << "\nWhat needs to be done today?\n (type done once finished)\n";
 
         //call list function
-        list(toDo);
+        list(toDo, priorityList);
 
         cout << "\033[2J\033[1;1H";
         cout << "[MY TODO-LIST] \nDate/Time: " << timeOutput;

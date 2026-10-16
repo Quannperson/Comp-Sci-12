@@ -5,35 +5,49 @@
 #include <string>
 #include <fstream>
 #include <limits>
-#include <utility>
+#include <unordered_set>
 
 using namespace std;
 
 //Ask user for tasks until done is inputted
-void list(vector <string>& toDo, vector <int> priorityList)
+void list(vector <string>& toDo, vector <int>& priorityList)
 {
     string variable;
     int priority;
 
-    while (getline (cin, variable))
+    while (true)
     {
-
-        cout << "\n Priority:";
-        priorityList.push_back(priority);
-
-       
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Task name: ";
+        getline(cin, variable);
 
         if (variable == "done")
-        {
             break;
+
+        cout << "Priority: ";
+        while (!(cin >> priority))
+        {
+            cout << "Invalid priority. Please enter a number: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        //make set to check dupe priorities
+        unordered_set<int> unique_elements(priorityList.begin(), priorityList.end());
+
+        if (unique_elements.count(priority) > 0)
+        {
+            cout << "You have already used that priority number, please choose a different one.\n";
+            continue;
         }
 
-        cout << "-";
         toDo.push_back(variable);
+        priorityList.push_back(priority);
     }
 }
 
-void sort(vector <string>& toDo)
+void sort(vector <string>& toDo) //sort list alphabetical or reverse
 {
     int n = 1;
     int m = 1;
@@ -42,6 +56,7 @@ void sort(vector <string>& toDo)
     char term = toDo[n][m];
     char nextTerm = toDo[n+1][m];
     char letter = 'a';
+    int holder;
 
     for (int i = 0; i < toDo.size(); i++)
     {
@@ -49,7 +64,9 @@ void sort(vector <string>& toDo)
         {
             if (nextTerm > term)
             {
-                swap(term, nextTerm);
+                int holder = term;
+                term = nextTerm;
+                nextTerm = holder;
                 n++;
                 m = 1;
             }
@@ -62,7 +79,9 @@ void sort(vector <string>& toDo)
         {
             if (term > nextTerm)
             {
-                swap(term, nextTerm);
+                int holder = term;
+                term = nextTerm;
+                nextTerm = holder;
                 n++;
                 m = 1;
             }
@@ -74,7 +93,7 @@ void sort(vector <string>& toDo)
     }
 }
 
-void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
+void menu(vector <string>& toDo, vector<int>& priorityList, ofstream& saved, string timeOutput)
 {
     string options;
     string sorting;
@@ -126,6 +145,9 @@ void menu(vector <string>& toDo, ofstream& saved, string timeOutput)
             {
                 saved << "-" << toDo[i] << endl;
             }
+
+            cout << "Your list has been saved to U1PROJ.txt\n";
+            break;
         }
         else if (options == "SORT")
         {
@@ -162,17 +184,19 @@ int main()
     //for looping
     bool back = true;
 
-    while (back = true)
+    while (back == true)
     {
 
         //Main
         cout << "Hello! Would you like to create a to-do list or view your current to-do list?" << endl;
         cin >> viewCreate;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if (toDo.empty())
         {
             cout << "\nYou have no current to-do list! Would you like to get started with a new list (yes/no)" << endl;
             cin >> response;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             if (response == "yes")
             {
                 cout << "\nLets get started." << endl;
@@ -193,10 +217,11 @@ int main()
             for (int i = 0; i < toDo.size(); i++)
             {
                 cout << toDo[i] << endl;
+                cout << priorityList[i] << endl;
             }
 
             //call the menu function
-            menu(toDo, saved, timeOutput);
+            menu(toDo, priorityList, saved, timeOutput);
         }
 
         cout << "\nWhat needs to be done today?\n (type done once finished)\n";
@@ -211,10 +236,11 @@ int main()
         for (int i = 0; i < toDo.size(); i++)
         {
             cout << "-" << toDo[i] << endl;
+            cout << priorityList[i] << endl;
         }
 
         //call the menu function
-        menu(toDo, saved, timeOutput);
+        menu(toDo, priorityList, saved, timeOutput);
 
         cout << "Would you like to go back to view/create or will that be all?\n (return/finish)\n";
         cin >> loopOrgo;

@@ -17,7 +17,6 @@ void list(vector <string>& toDo, vector <int>& priorityList)
 
     while (true)
     {
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Task name: ";
         getline(cin, variable);
 
@@ -47,11 +46,10 @@ void list(vector <string>& toDo, vector <int>& priorityList)
     }
 }
 
-void sort(vector <string>& toDo) //sort list alphabetical or reverse
+void sort(vector <string>& toDo, string sorting) //sort list alphabetical or reverse
 {
     int n = 1;
     int m = 1;
-    string sorting;
 
     char term = toDo[n][m];
     char nextTerm = toDo[n+1][m];
@@ -143,7 +141,7 @@ void menu(vector <string>& toDo, vector<int>& priorityList, ofstream& saved, str
 
             for (int i = 0; i < toDo.size(); i++)
             {
-                saved << "-" << toDo[i] << endl;
+                saved << priorityList[i] << "-" << toDo[i] << endl;
             }
 
             cout << "Your list has been saved to U1PROJ.txt\n";
@@ -153,7 +151,7 @@ void menu(vector <string>& toDo, vector<int>& priorityList, ofstream& saved, str
         {
             cout << "How would you like to sort your list?\n [alphabetical/reverse]\n";
             cin >> sorting;
-            sort(toDo);
+            sort(toDo, sorting);
         }
         else
         {
@@ -192,68 +190,79 @@ int main()
         cin >> viewCreate;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-        if (toDo.empty())
+        if (viewCreate == "create" || viewCreate == "view")
         {
-            cout << "\nYou have no current to-do list! Would you like to get started with a new list (yes/no)" << endl;
-            cin >> response;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            if (response == "yes")
+            if (toDo.empty())
             {
-                cout << "\nLets get started." << endl;
-                cout << "\033[2J\033[1;1H";
+                cout << "\nYou have no current to-do list! Would you like to get started with a new list (yes/no)" << endl;
+                cin >> response;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                if (response == "yes")
+                {
+                    cout << "\nLets get started." << endl;
+                    cout << "\033[2J\033[1;1H";
+
+                    cout << "\nWhat needs to be done today?\n (type done once finished)\n";
+
+                    //call list function
+                    list(toDo, priorityList);
+
+                    cout << "\033[2J\033[1;1H";
+                    cout << "[MY TODO-LIST] \nDate/Time: " << timeOutput;
+
+                    //print inputted list
+                        for (int i = 0; i < toDo.size(); i++)
+                        {
+                            cout << priorityList[i] << "-" << toDo[i] << endl;
+                        }
+
+                    //call the menu function
+                    menu(toDo, priorityList, saved, timeOutput);
+                }
+                else
+                {
+                    cout << "No worries, have a good day." << endl;
+                    return 0;
+                }
             }
             else
             {
-                cout << "No worries, have a good day." << endl;
-                return 0;
+                cout << "Let's see your current to-do list!" << endl;
+                cout << "[MY TODO-LIST]\n" << timeOutput;
+
+                //output list
+                for (int i = 0; i < toDo.size(); i++)
+                {
+                    cout << priorityList[i] << "-" << toDo[i] << endl;
+                }
+
+                //call the menu function
+                menu(toDo, priorityList, saved, timeOutput);
             }
         }
-        else 
+        else
         {
-            cout << "Let's see your current to-do list!" << endl;
-            cout << "[MY TODO-LIST]\n" << timeOutput;
-
-            //output list
-            for (int i = 0; i < toDo.size(); i++)
-            {
-                cout << toDo[i] << endl;
-                cout << priorityList[i] << endl;
-            }
-
-            //call the menu function
-            menu(toDo, priorityList, saved, timeOutput);
+            cout << "Hmm, that wasn't an option, try again!\n" << endl;
+            continue;
         }
-
-        cout << "\nWhat needs to be done today?\n (type done once finished)\n";
-
-        //call list function
-        list(toDo, priorityList);
-
-        cout << "\033[2J\033[1;1H";
-        cout << "[MY TODO-LIST] \nDate/Time: " << timeOutput;
-
-        //print inputted list
-        for (int i = 0; i < toDo.size(); i++)
-        {
-            cout << "-" << toDo[i] << endl;
-            cout << priorityList[i] << endl;
-        }
-
-        //call the menu function
-        menu(toDo, priorityList, saved, timeOutput);
-
+            
         cout << "Would you like to go back to view/create or will that be all?\n (return/finish)\n";
         cin >> loopOrgo;
 
         if (loopOrgo == "return")
         {
-        back = true;
+            back = true;
         }
-
         else if (loopOrgo == "finish")
         {
-        back = false;
-        cout << "Have a good day!";
+            back = false;
+            cout << "Have a good day!";
+        }
+        else
+        {
+            cout << "Hmmm, invalid, lets go to the main menu.\n";
+            back = true;
         }
     }
 }

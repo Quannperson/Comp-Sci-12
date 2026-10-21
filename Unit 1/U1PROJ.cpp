@@ -28,7 +28,7 @@ void list(vector <string>& toDo, vector <int>& priorityList)
         {
             cout << "Invalid priority. Please enter a number: ";
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); //clearing the weird buffer so my stuff outputs properly
         }
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
@@ -46,46 +46,36 @@ void list(vector <string>& toDo, vector <int>& priorityList)
     }
 }
 
-void sort(vector <string>& toDo, string sorting) //sort list alphabetical or reverse
+void sort(vector <string>& toDo, vector <int>& priorityList, string sorting) //sort list alphabetical or reverse
 {
-    int n = 1;
-    int m = 1;
+    int n = toDo.size();
 
-    char term = toDo[n][m];
-    char nextTerm = toDo[n+1][m];
-    char letter = 'a';
-    int holder;
-
-    for (int i = 0; i < toDo.size(); i++)
+    for (int i = 0; i < n; i++)
     {
-        if (sorting == "alphabetical")
+        for (int m = 0; m < n - 1; m++)
         {
-            if (nextTerm > term)
+            bool swapNeeded = false;
+
+            if (sorting == "alphabetical")
             {
-                int holder = term;
-                term = nextTerm;
-                nextTerm = holder;
-                n++;
-                m = 1;
+                if (toDo[m] > toDo[m + 1])
+                    swapNeeded = true;
             }
-            else if (term == nextTerm)
+            else if (sorting == "reverse")
             {
-                m++;
+                if (toDo[m] < toDo[m + 1])
+                    swapNeeded = true;
             }
-        }
-        else if (sorting == "reverse")
-        {
-            if (term > nextTerm)
+
+            if (swapNeeded)
             {
-                int holder = term;
-                term = nextTerm;
-                nextTerm = holder;
-                n++;
-                m = 1;
-            }
-            else if (term == nextTerm)
-            {
-                m++;
+                string term = toDo[m];
+                toDo[m] = toDo[m + 1];
+                toDo[m + 1] = term;
+
+                int tempPrio = priorityList[m];
+                priorityList[m] = priorityList[m + 1];
+                priorityList[m + 1] = tempPrio;
             }
         }
     }
@@ -151,7 +141,7 @@ void menu(vector <string>& toDo, vector<int>& priorityList, ofstream& saved, str
         {
             cout << "How would you like to sort your list?\n [alphabetical/reverse]\n";
             cin >> sorting;
-            sort(toDo, sorting);
+            sort(toDo, priorityList, sorting);
         }
         else
         {
@@ -173,7 +163,7 @@ int main()
     string loopOrgo;
 
     //txt file
-    ofstream saved("U1PROJ.txt");
+    ofstream saved("U1PROJ.txt", ios::trunc); //trunc clears file before outputs
 
     //Set time to EST
     time_t currentTime = time(nullptr);

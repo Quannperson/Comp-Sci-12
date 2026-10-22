@@ -1,0 +1,1 @@
+vector <int> magicNumbers = {2, 3, 5, 28};

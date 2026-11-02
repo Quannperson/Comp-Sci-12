@@ -22,7 +22,7 @@ using namespace std;
 
     void playerBoards(vector<vector<int>>& boardOne, vector<vector<int>>& boardTwo, const string& player1, const string& player2)
     {
-
+        
     }
 
     void chooseBoats(vector<vector<int>>& board, int boatNumber, int boatCounter, string& playerName)
@@ -57,7 +57,42 @@ using namespace std;
         chooseBoats(board, boatNumber, boatCounter + 1, playerName);
     }
 
+    void hitOrmiss(vector<vector<int>>& board, string playerName)
+    {
+        "Ok player one's turn, choose where to fire: "\n
+        cin << row >> column;
 
+        if (row < 'A' || row > 'J' || column < 1 || column > 10)
+        {
+            cout << "Hmm.. not on the grid, try again!\n";
+        }
+
+        else if (board[row - 'A'][column - 1] != 0)
+        {
+            cout << "Hmm.. can't stack boats, try again!\n";
+        }
+
+        else if(board[row - 'A'][column - 1] = 1)
+        {r
+            cout << "oof, big miss\n";
+        }
+
+        else if(board[row - 'A'][column - 1] != 0)
+        {
+            cout << "Hit! bangbang\n" << board[row - 'A'][column - 1].clear();
+        }
+        
+        for(int i = 0;)
+        {
+            if(board[row - 'B'][column - 2]) //plan add offset to check adjacent and ++ to offset bro im so fried
+            {
+                
+                i++
+            }
+            else
+            break;
+        }
+    }
     
 int main()
 {
@@ -87,6 +122,7 @@ int main()
     cin >> boatNumber;
     chooseBoats(boardOne, boatNumber, boatCounter, player1);
     chooseBoats(boardTwo, boatNumber, boatCounter, player2);
+
 
 
 }

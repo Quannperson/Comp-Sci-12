@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -66,6 +67,7 @@ using namespace std;
 
     void hitOrmiss(vector<vector<int>>& board, const string& playerName)
     {
+        int cellCount = 0;
         char row;
         int column;
         int surrounding = 0;
@@ -95,12 +97,14 @@ using namespace std;
             {
                 cout << "Oof.. big miss\n";
                 board[rowMark][columnMark] = 2; //set to missed value
+                cellCount++;
                 break;
             }
             else
             {
                 cout << "Bangg hit! \n";
                 board[rowMark][columnMark] = 3; //set to hit value
+                cellCount++;
                 break;
             }
         }
@@ -134,21 +138,29 @@ using namespace std;
             for (int c = 0; c < 10; c++)
             {
                 if (board[r][c] == 1)
+                {
                     count++;
+                }
             }
         }
 
         return count;
     }
 
-    void playerBoards(vector<vector<int>>& boardOne, vector<vector<int>>& boardTwo, const string& player1, const string& player2)
+    void playerBoards(vector<vector<int>>& boardOne, vector<vector<int>>& boardTwo, const string& player1, const string& player2, int boatNumber, int boatCounter)
     {
         bool player1Turn = true;
+        int player1BoatsLeft = boatsLeft(boardOne);
+        int player2BoatsLeft = boatsLeft(boardTwo);
+        int cellCount1 = 0;
+        int cellCount2 = 0;
 
         while (boatsLeft(boardOne) > 0 && boatsLeft(boardTwo) > 0)
         {
             hitOrmiss(boardTwo, player1); // Player 1 shoots
+            cellCount1++;
             hitOrmiss(boardOne, player2); // Player 2 shoots
+            cellCount2++;
 
             cout << player1 << "'s board:\n";
             battleshipBoard(boardOne);
@@ -157,20 +169,22 @@ using namespace std;
             battleshipBoard(boardTwo);
         }
 
-        int player1BoatsLeft = boatsLeft(boardOne);
-        int player2BoatsLeft = boatsLeft(boardTwo);
-
-        if (player1BoatsLeft == 0 && player2BoatsLeft == 0)
+        if(cellCount2 >= 100 || cellCount1 >= 100)
         {
-            cout << "Wowie! Close match, it's a draw!\n";
+            cout << "\nDang, didn't know that was possible... double loss!";
         }
-        else if (player2BoatsLeft == 0)
+        else if(player1BoatsLeft == 0 && player2BoatsLeft == 0)
         {
-            cout << "Yippee! " << player1 << " wins!\n";
+            cout << "\nWowie! Close, it's a draw! Let's choose more boats to keep playing!\n";
+            chooseBoats(boardTwo, boatNumber, 0, player1);
+        }
+        else if(player2BoatsLeft == 0)
+        {
+            cout << "\nYippee! " << player1 << " wins!\n";
         }
         else
         {
-            cout << "Yippee! " << player2 << " wins!\n";
+            cout << "\nYippee! " << player2 << " wins!\n";
         }
     }
 
@@ -211,5 +225,5 @@ int main()
     chooseBoats(boardTwo, boatNumber, boatCounter, player2);
 
     cout << "Time to get started! ";
-    playerBoards(boardOne, boardTwo, player1, player2);
+    playerBoards(boardOne, boardTwo, player1, player2, boatNumber, boatCounter);
 }

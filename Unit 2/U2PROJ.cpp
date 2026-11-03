@@ -1,6 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <U2PROJ.hpp>
 
 using namespace std;
 
@@ -17,11 +15,11 @@ using namespace std;
             {
                 if (boards[a][b] == 2)
                 {
-                    cout << " \033[31m*\033[0m"; // misses are red
+                    cout << " \033[31m*\033[0m"; //misses are red
                 }
                 else if (boards[a][b] == 3)
                 {
-                    cout << " \033[32m*\033[0m"; // hits are green
+                    cout << " \033[32m*\033[0m"; //hits are green
                 }
                 else
                 {
@@ -32,7 +30,7 @@ using namespace std;
         }
     }
 
-    void chooseBoats(vector<vector<int>>& board, int boatNumber, int boatCounter, string& playerName)
+    void chooseBoats(vector<vector<int>>& board, int boatNumber, int boatCounter, const string& playerName)
     //choosing boats for players
     {
         char row;
@@ -65,16 +63,39 @@ using namespace std;
         chooseBoats(board, boatNumber, boatCounter + 1, playerName);
     }
 
+    int adjBoats(const vector<vector<int>>& board, int rowMark, int columnMark, int index)
+    {
+        static const int rowOffsets[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+        static const int columnOffsets[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        if (index == 8) //finish if all surrounding cells are checked
+        {
+            return 0;
+        }
+
+        int adjRow = rowMark + rowOffsets[index];
+        int adjColumn = columnMark + columnOffsets[index];
+        int count = 0;
+
+        if (adjRow >= 0 && adjRow < 10 && adjColumn >= 0 && adjColumn < 10 && board[adjRow][adjColumn] == 1)
+        {
+            count = 1;
+        }
+    
+
+        //check the next position, then add its count to current one
+        return count + adjBoats(board, rowMark, columnMark, index + 1);
+    }
+
+
     void hitOrmiss(vector<vector<int>>& board, const string& playerName)
     {
-        int cellCount = 0;
         char row;
         int column;
-        int surrounding = 0;
         char rowMark;
         int columnMark;
 
-        cout << "Let's see, " << playerName << " choose a coordinate to shoot: ";
+        cout << "\nLet's see, " << playerName << " choose a coordinate to shoot: ";
 
         while(true)
         {
@@ -97,39 +118,22 @@ using namespace std;
             {
                 cout << "Oof.. big miss\n";
                 board[rowMark][columnMark] = 2; //set to missed value
-                cellCount++;
                 break;
             }
             else
             {
                 cout << "Bangg hit! \n";
                 board[rowMark][columnMark] = 3; //set to hit value
-                cellCount++;
                 break;
             }
         }
 
-        for (int r = -1; r <= 1; r++) //r is the row offset
-        {
-            for (int c = -1; c <= 1; c++) //c is the column offset
-            {
-                if (r == 0 && c == 0) //skips the shot cell
-                    continue;
+        int adjacent = adjBoats(board, rowMark, columnMark, 0);
 
-                int adjRow = rowMark + r;
-                int adjColumn = columnMark + c;
-
-                if (adjRow >= 0 && adjRow < 10 && adjColumn >= 0 && adjColumn < 10 && board[adjRow][adjColumn] == 1)
-                {
-                    surrounding++;
-                }
-            }
-        }
-
-        cout << "There are " << surrounding << " boats around the cell you shot...\n";
+        cout << "There are " << adjacent << " unhit boats around the cell you shot...\n";
     }
 
-    int boatsLeft(const vector<vector<int>>& board)
+    int boatsLeft(const vector<vector<int>>& board) //counts how many boats are left
     {
         int count = 0;
 
@@ -150,8 +154,6 @@ using namespace std;
     void playerBoards(vector<vector<int>>& boardOne, vector<vector<int>>& boardTwo, const string& player1, const string& player2, int boatNumber, int boatCounter)
     {
         bool player1Turn = true;
-        int player1BoatsLeft = boatsLeft(boardOne);
-        int player2BoatsLeft = boatsLeft(boardTwo);
         int cellCount1 = 0;
         int cellCount2 = 0;
 
@@ -169,6 +171,9 @@ using namespace std;
             battleshipBoard(boardTwo);
         }
 
+        int player1BoatsLeft = boatsLeft(boardOne);
+        int player2BoatsLeft = boatsLeft(boardTwo);
+
         if(cellCount2 >= 100 || cellCount1 >= 100)
         {
             cout << "\nDang, didn't know that was possible... double loss!";
@@ -176,7 +181,17 @@ using namespace std;
         else if(player1BoatsLeft == 0 && player2BoatsLeft == 0)
         {
             cout << "\nWowie! Close, it's a draw! Let's choose more boats to keep playing!\n";
-            chooseBoats(boardTwo, boatNumber, 0, player1);
+
+            cout << "\nFirst, " << player1 << " choose where you want to place 2 more boats\n";
+            cout << "\033[2J\033[H";
+            chooseBoats(boardOne, 2, 0, player1);
+
+            cout << "Now, " << player2 << " two boats as well\n";
+            chooseBoats(boardTwo, 2, 0, player2);
+            cout << "\033[2J\033[H";
+
+            cout << "Ok run it back\n";
+
         }
         else if(player2BoatsLeft == 0)
         {
@@ -207,7 +222,7 @@ int main()
     cout << "\nPlayer 1, who are you?: ";
     cin >> player1;
 
-    cout << "Player 2, who are you?: ";
+    cout << "\nPlayer 2, who are you?: ";
     cin >> player2;
 
     cout << "\nLet's present our board!\n";
@@ -223,7 +238,8 @@ int main()
 
     cout << "Alright " << player2 << ", type the coordinates of your ships one by one!\n";
     chooseBoats(boardTwo, boatNumber, boatCounter, player2);
+    cout << "\033[2J\033[H";
 
-    cout << "Time to get started! ";
+    cout << "Time to get started!";
     playerBoards(boardOne, boardTwo, player1, player2, boatNumber, boatCounter);
 }

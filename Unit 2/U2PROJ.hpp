@@ -4,6 +4,8 @@
     #include <iostream>
     #include <vector>
     #include <algorithm>
+    #include <cctype>
+    #include <limits>
 
     using namespace std;
     
@@ -48,7 +50,14 @@
 
         while (true)
         {
-            cin >> row >> column;
+            if (!(cin >> row >> column))
+            {
+                cin.clear();
+                cout << "Hmm.. not on the grid, try again!\n";
+                continue;
+            }
+
+            row = static_cast<char>(toupper(static_cast<unsigned char>(row)));
 
             if (row < 'A' || row > 'J' || column < 1 || column > 10)
             {
@@ -104,7 +113,15 @@
 
         while(true)
         {
-            cin >> row >> column;
+            if (!(cin >> row >> column))
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Hmm.. not on the grid, try again!\n";
+                continue;
+            }
+
+            row = static_cast<char>(toupper(static_cast<unsigned char>(row)));
             rowMark = row - 'A';
             columnMark = column - 1;
 

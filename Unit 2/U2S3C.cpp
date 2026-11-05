@@ -4,7 +4,7 @@ using namespace std;
 
 int fibonacci(int number)
 {
-    if(number <= 1)
+    if(number < 1)
     {
         return number;
     }

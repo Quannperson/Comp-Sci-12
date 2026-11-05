@@ -6,7 +6,7 @@ int fiftyNumbers(int number)
 {
     if(number > 50)
     {
-        return;
+        return number;
     }
     else
     {

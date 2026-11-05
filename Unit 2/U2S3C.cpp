@@ -1,19 +1,16 @@
 #include <iostream>
-#include <vector>
-#include <numeric>
 
 using namespace std;
 
 int fibonacci(int number)
 {
-    if (number <= 1)
+    if(number <= 1)
     {
         return number;
     }
     else
     {
-        
-        return fibonacci;
+        return fibonacci(number - 1) + fibonacci(number - 2);
     }
 }
 

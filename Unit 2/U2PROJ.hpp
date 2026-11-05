@@ -3,7 +3,6 @@
 
     #include <iostream>
     #include <vector>
-    #include <algorithm>
     #include <cctype>
     #include <limits>
 
@@ -53,6 +52,7 @@
             if (!(cin >> row >> column))
             {
                 cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Hmm.. not on the grid, try again!\n";
                 continue;
             }

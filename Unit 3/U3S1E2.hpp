@@ -7,9 +7,9 @@ using namespace std;
 class studentProfile
 {
     public:
-    string name;
-    int grade;
-    float studentNumber;
+        string name;
+        int grade;
+        float studentNumber;
 };
 
 #endif

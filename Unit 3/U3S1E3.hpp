@@ -8,10 +8,10 @@ using namespace std;
 class studentProfile
 {
     public:
-    string name;
-    int grade;
-    float studentNumber;
-    vector<int> marks;
+        string name;
+        int grade;
+        float studentNumber;
+        vector<int> marks;
 };
 
 #endif

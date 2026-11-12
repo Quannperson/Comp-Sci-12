@@ -1,61 +1,42 @@
 #include <iostream>
 using namespace std;
 
-class Enemy
+class playerEnemy
 {
     public:
-    int enemyAttack;
-    int enemyHealth;
 
-    int enemyUpdhealth(int playerAttack)
-    {
-        cout << "\n" << enemyHealth - playerAttack << endl;
-        return enemyHealth;
-    }
+        int attack;
+        int health;
 
-    void enemyHealthbar()
-    {
-        cout << "|";
-
-        for(int i = 0; i < enemyHealth; i++)
+        playerEnemy(int attackInput, int healthInput)
         {
-            cout << "--|";
+            attack = attackInput;
+            health = healthInput;
         }
-    }
-};
 
-class Player
-{
-    public:
-    int playerAttack;
-    int playerHealth;
-
-    
-    int playerUpdhealth(int enemyAttack)
-    {
-        cout << "\n" << playerHealth - enemyAttack << endl;
-        return playerHealth;
-    }
-
-        void playerHealthbar()
-    {
-        cout << "|";
-
-        for(int i = 0; i < playerHealth; i++)
+        void displayHealth(int health)
         {
-            cout << "--|";
+            cout << health;
         }
-    }
+
+        void displayAttack(int attack)
+        {
+            cout << attack;
+        }
 };
 
 int main()
 {
-    Enemy alhadi = {2, 11};
-    Player quinn = {4, 10};
+    playerEnemy alhadi(2, 11);
+    playerEnemy quinn(4, 10);
 
-    while(alhadi.enemyHealth <= 0 || quinn.playerHealth <= 0)
+    while(alhadi.health <= 0 || quinn.health <= 0)
     {
-        alhadi.enemyUpdhealth(quinn.playerAttack);
-        quinn.playerUpdhealth(alhadi.enemyAttack);
+        cout << alhadi.attack - quinn.health << endl;
+    }
+
+    while(alhadi.health <= 0 || quinn.health <= 0)
+    {
+        cout << alhadi.attack - quinn.health << endl;
     }
 }

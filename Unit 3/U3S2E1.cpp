@@ -4,27 +4,27 @@ using namespace std;
 class Enemy
 {
     public:
-    int enemyAttack;
-    int enemyHealth;
+        int enemyAttack;
+        int enemyHealth;
 
-    int enemyUpdhealth(int playerAttack)
-    {
-        cout << enemyHealth - playerAttack;
-        return enemyHealth;
-    }
+        int enemyUpdhealth(int playerAttack)
+        {
+            cout << enemyHealth - playerAttack;
+            return enemyHealth;
+        }
 };
 
 class Player
 {
     public:
-    int playerAttack;
-    int playerHealth;
+        int playerAttack;
+        int playerHealth;
 
-    int playerUpdhealth(int enemyAttack)
-    {
-        cout << playerHealth - enemyAttack;
-        return playerHealth;
-    }
+        int playerUpdhealth(int enemyAttack)
+        {
+            cout << playerHealth - enemyAttack;
+            return playerHealth;
+        }
 };
 
 int main()

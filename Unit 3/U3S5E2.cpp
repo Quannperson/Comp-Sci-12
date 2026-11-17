@@ -30,22 +30,36 @@ class Player
 
 int main()
 {
-    vector<vector<Enemy>> alhadis;
+    vector<Enemy> alhadis;
 
     for(int i = 0; i < 7; i++)
     {
         cout << "Adding an Alhadi to the list" << endl;
-        alhadis.push_back(vector<Enemy>{Enemy()});
+        alhadis.push_back(Enemy());
     }
+
     Player quinn = {4, 10};
 
     for(int i = 0; i < 7; i++)
     {
+        Enemy& alhadi = alhadis[i];
+
+        cout << "Alhadi" << i + 1 << "challenges Quinn!\n";
+ 
         while(alhadis[i].enemyHealth > 0 && quinn.playerHealth > 0)
         {
-            alhadis[i].enemyUpdHealth(quinn.playerAttack);
-            quinn.playerUpdHealth(alhadi.enemyAttack);
+            cout << alhadis[i].enemyUpdHealth(quinn.playerAttack) << endl;
+            cout << quinn.playerUpdHealth(alhadi.enemyAttack) << endl;
         }
-        i++
+        i++;
+    }
+
+    if(quinn.playerHealth == 0)
+    {
+        cout << "Defeat";
+    }
+    else
+    {
+        cout << "Big win!";
     }
 }

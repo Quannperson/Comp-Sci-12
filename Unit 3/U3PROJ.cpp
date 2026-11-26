@@ -13,10 +13,11 @@ class Entity
 
 class Player: public Entity
 {
-    protected:
+    public:
         int hp;
         int attack;
         int defence;
+        string element;
 };
 
 class Enemy: public Entity
@@ -32,9 +33,9 @@ class Alhadi: public Player
     public:
         Alhadi()
         {
-            int hp = 23;
-            int attack = 4;
-            int defence = 3;
+            hp = 23;
+            attack = 4;
+            defence = 3;
             string name;
         }
 };
@@ -44,9 +45,9 @@ class Ashaw: public Player
     public:
         Ashaw()
         {
-            int hp = 14;
-            int attack = 10;
-            int defence = 6;
+            hp = 14;
+            attack = 10;
+            defence = 6;
             string name;
         }
 };
@@ -56,9 +57,9 @@ class Quinn: public Player
     public:
         Quinn()
         {
-            int hp = 10;
-            int attack = 17;
-            int defence = 3;
+            hp = 10;
+            attack = 17;
+            defence = 3;
             string name;
         }
 };
@@ -81,15 +82,20 @@ int main()
     } 
     else if(classSelect == "Ashaw")
     {
-        player = make_unique<Alhadi>();
+        player = make_unique<Ashaw>();
     }
     else if(classSelect == "Quinn")
     {
-        player = make_unique<Alhadi>();
+        player = make_unique<Quinn>();
+    }
+    else
+    {
+        cout << "Huh? try again\n";
     }
 
-    cout << "Your health: " << player->hp;
-    cout << "Your attack: " << player->attack;
-    cout << "Your defence: " << player->defence;
+    cout << "Your...\nHealth: " << player->hp;
+    cout << "\nAttack: " << player->attack;
+    cout << "\nDefence: " << player->defence;
+    cout << "\nMagic: "<< player->element;
 
 }

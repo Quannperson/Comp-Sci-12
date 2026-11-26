@@ -71,26 +71,30 @@ int main()
 
     cout << "Welcome player! What is your name?" << endl;
     cin >> name;
-    cout << "\nBattle is soon, please select what class you would like to play!\nAlhadi-Ashaw-Quinn" << endl;
-    cin >> classSelect;
 
-    unique_ptr<Player> player;
+    while(!player)
+    {
+        cout << "\nBattle is soon, please select what class you would like to play!\nAlhadi-Ashaw-Quinn" << endl;
+        cin >> classSelect;
 
-    if(classSelect == "Alhadi")
-    {
-        player = make_unique<Alhadi>();
-    } 
-    else if(classSelect == "Ashaw")
-    {
-        player = make_unique<Ashaw>();
-    }
-    else if(classSelect == "Quinn")
-    {
-        player = make_unique<Quinn>();
-    }
-    else
-    {
-        cout << "Huh? try again\n";
+        unique_ptr<Player> player;
+
+        if(classSelect == "Alhadi")
+        {
+            player = make_unique<Alhadi>();
+        } 
+        else if(classSelect == "Ashaw")
+        {
+            player = make_unique<Ashaw>();
+        }
+        else if(classSelect == "Quinn")
+        {
+            player = make_unique<Quinn>();
+        }
+        else
+        {
+            cout << "Huh? try again\n";
+        }
     }
 
     cout << "Your...\nHealth: " << player->hp;
